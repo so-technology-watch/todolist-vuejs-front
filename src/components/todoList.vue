@@ -2,7 +2,7 @@
   <v-list-group :value="list.isActive">
     <v-list-tile slot="item" @click="list.isActive = !list.isActive">
       <v-list-tile-action>
-        <v-icon :color="list.isDone ? 'green' : ''" dark>done_all</v-icon>
+        <v-icon :color="list.isDone ? 'teal' : ''" dark>done_all</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <v-list-tile-title>{{ list.title }}</v-list-tile-title>
@@ -16,8 +16,8 @@
         <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
       </v-list-tile-content>
       <v-list-tile-action>
-        <v-icon :color="subItem.isDone ? 'green' : ''" dark
-                @click="subItem.isDone = !subItem.isDone">check_circle</v-icon>
+        <v-icon :color="subItem.isDone ? 'teal' : ''" dark
+                @click="isDoneChanged(subItem)">check_circle</v-icon>
       </v-list-tile-action>
     </v-list-tile>
   </v-list-group>
@@ -30,7 +30,18 @@ export default {
   methods: {
     selectItem(item) {
       this.$emit("itemSelected", item)
+    },
+    isDoneChanged(item) {
+      item.isDone = !item.isDone
+      this.list.isDone = this.list.items.every(item => {
+        return item.isDone
+      })
     }
+  },
+  created() {
+    this.list.isDone = this.list.items.every(item => {
+        return item.isDone
+      })
   }
 };
 </script>

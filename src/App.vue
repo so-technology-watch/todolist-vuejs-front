@@ -15,7 +15,10 @@
       <v-container fluid>
         <v-slide-y-transition mode="out-in">
           <v-layout column align-center>
-            <todoItemContent :item="selectedItem" />
+            <todoItemContent :item="selectedItem" v-if="selectedItem != null"/>
+            <v-card v-else>
+              Welcome
+            </v-card>
           </v-layout>
         </v-slide-y-transition>
       </v-container>
@@ -26,14 +29,20 @@
 <script>
 import todoItemContent from "./components/todoItem-content.vue";
 import todoList from "./components/todoList.vue";
+import * as restClient from "./restClient"
+
 
 export default {
   components: {
     todoItemContent,
     todoList
   },
+  created() {
+    restClient.GetAll()
+  },
   data() {
     return {
+      currentContent: {compo:"todoItem-content", item:"selectedItem"},
       drawer: true,
       todoLists: [
         {

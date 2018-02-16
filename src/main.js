@@ -11,5 +11,5 @@ var data = {
 new Vue({
   el: '#app',
   render: h => h(App),
-  data: data
+  data: data,
 })

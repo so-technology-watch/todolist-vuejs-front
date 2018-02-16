@@ -2,9 +2,7 @@
   <v-app>
     <v-navigation-drawer fixed :clipped=true v-model="drawer" app>
       <v-list>
-        <todoList :list="todoList" :value="todoList.title" 
-        v-for="(todoList, i) in todoLists" :key="i"
-        @itemSelected="item => {selectedItem = item }" />
+        <todoList :task="todoList" :value="todoList.title" v-for="(todoList, i) in todoLists" :key="i" @itemSelected="item => {selectedItem = item }" />
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left=true>
@@ -15,7 +13,7 @@
       <v-container fluid>
         <v-slide-y-transition mode="out-in">
           <v-layout column align-center>
-            <todoItemContent :item="selectedItem" v-if="selectedItem != null"/>
+            <todoItemContent :item="selectedItem" v-if="selectedItem != null" />
             <v-card v-else>
               Welcome
             </v-card>
@@ -29,8 +27,7 @@
 <script>
 import todoItemContent from "./components/todoItem-content.vue";
 import todoList from "./components/todoList.vue";
-import * as restClient from "./restClient"
-
+import * as restClient from "./restClient";
 
 export default {
   components: {
@@ -38,28 +35,14 @@ export default {
     todoList
   },
   created() {
-    restClient.GetAll()
+    restClient.GetAll(todo => this.todoLists = todo);
+    // restClient.DeleteAll(console.log)
   },
   data() {
     return {
-      currentContent: {compo:"todoItem-content", item:"selectedItem"},
+      currentContent: { compo: "todoItem-content", item: "selectedItem" },
       drawer: true,
-      todoLists: [
-        {
-          title: "Todo1",
-          isDone: false,
-          isActive: true,
-          items: [{ title: "task1", isDone: true }]
-        },
-        {
-          title: "Todo2",
-          isActive: false,
-          items: [
-            { title: "task2", isDone: true },
-            { title: "task3", isDone: false }
-          ]
-        }
-      ],
+      todoLists: [],
       selectedItem: null
     };
   }

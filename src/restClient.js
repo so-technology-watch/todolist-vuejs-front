@@ -1,21 +1,29 @@
-import https from "https"
+import axios from "axios"
 
-const hostname = 'api-adresse.data.gouv.fr'
+const hostname = 'https://go-back-sample.appspot.com'
 
-export function GetAll() {
-  const options = {
-    hostname: hostname,
-    path: '/search/?q=43%20route%20de%20la%20joneliere',
-    method: 'GET',
-  }
+axios.defaults.baseURL = hostname
 
-  return requestMaker(options, x => console.log(JSON.parse(x)))
+export function GetAll(callback) {
+  axios.get("/tasks").then(x => callback(x.data))
 }
 
-function requestMaker(options, dataHandler) {
-  https.request(options, res => {
-    return res.on('data', dataHandler)
-  })
-  .on('error', console.error)
-  .end()
+export function Get(id, callback) {
+  axios.get("/tasks/"+id).then(x => callback(x.data))
+}
+
+export function Create(obj, callback) {
+  axios.post("/tasks", JSON.stringify(obj)).then(x => callback(x.data))
+}
+
+export function Update(id, obj, callback) {
+  axios.put("/tasks/"+id, JSON.stringify(obj)).then(x => callback(x.data))
+}
+
+export function Delete(id, callback) {
+  axios.delete("/tasks/"+id).then(x => callback(x.data))
+}
+
+export function DeleteAll(callback) {
+  axios.delete("/tasks/").then(x => callback(x.data))
 }

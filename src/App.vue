@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer fixed :clipped=true v-model="drawer" app>
       <v-list>
-        <todoList :task="todoList" :value="todoList.title" v-for="(todoList, i) in todoLists" :key="i" @itemSelected="item => {selectedItem = item }" />
+        <todoItem :task="todoItem" :value="todoItem.title" v-for="(todoItem, i) in todoItems" :key="i" />
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left=true>
@@ -10,41 +10,59 @@
       <v-toolbar-title>TodoList</v-toolbar-title>
     </v-toolbar>
     <v-content>
-      <v-container fluid>
-        <v-slide-y-transition mode="out-in">
-          <v-layout column align-center>
-            <todoItemContent :item="selectedItem" v-if="selectedItem != null" />
-            <v-card v-else>
+      <v-container grid-list-md>
+          <v-layout row wrap>
+            <todoItemCard :item="todoItem" 
+                          v-for="(todoItem, i) in todoItems" :key="i"
+                          @itemChecked="checkItem"/>
+            <!-- <v-card>
               Welcome
-            </v-card>
+            </v-card> -->
+            <v-btn fixed absolute bottom fab dark right @click.native="addTask()" color="indigo" >
+              <v-icon>add</v-icon>
+            </v-btn>
           </v-layout>
-        </v-slide-y-transition>
       </v-container>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import todoItemContent from "./components/todoItem-content.vue";
-import todoList from "./components/todoList.vue";
+import todoItemCard from "./components/todoItem-card.vue";
+import todoItem from "./components/todoItem.vue";
 import * as restClient from "./restClient";
 
 export default {
   components: {
-    todoItemContent,
-    todoList
+    todoItemCard,
+    todoItem
   },
   created() {
-    restClient.GetAll(todo => this.todoLists = todo);
+    this.refreshTasks()
+    // restClient.DeleteAll(todo => this.todoItems = todo);
     // restClient.DeleteAll(console.log)
   },
   data() {
     return {
       currentContent: { compo: "todoItem-content", item: "selectedItem" },
       drawer: true,
-      todoLists: [],
+      todoItems: [],
       selectedItem: null
     };
+  },
+  methods: {
+    addTask() {
+      restClient.Create({
+        title:"newTask",
+        description: "new Description"
+      }, this.refreshTasks)
+    },
+    refreshTasks() {
+      restClient.GetAll(todo => (this.todoItems = todo));
+    },
+    checkItem(item) {
+      item.status = (item.status + 1) % 2
+    }
   }
 };
 </script>

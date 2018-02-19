@@ -24,6 +24,6 @@ export function Delete(id, callback) {
   axios.delete("/tasks/"+id).then(x => callback(x.data))
 }
 
-export function DeleteAll(callback) {
-  axios.delete("/tasks/").then(x => callback(x.data))
+export function DeleteAll() {
+  axios.delete("/tasks/")
 }

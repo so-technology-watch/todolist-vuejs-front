@@ -2,7 +2,7 @@
   <v-list-group>
     <v-list-tile slot="item" @click="selectItem(task)">
       <v-list-tile-action>
-        <v-icon :color="task.status == 1 ? 'green' : ''" dark>done_all</v-icon>
+        <v-icon :color="task.status == 1 ? 'green' : ''" dark>check_circle</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <v-list-tile-title>{{ task.title }}</v-list-tile-title>
@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "todoList",
+  name: "todoItem",
   props: ["task"],
   methods: {
     selectItem(item) {

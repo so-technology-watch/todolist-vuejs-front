@@ -11,17 +11,15 @@
     </v-toolbar>
     <v-content>
       <v-container grid-list-md>
-          <v-layout row wrap>
-            <todoItemCard :item="todoItem" 
-                          v-for="(todoItem, i) in todoItems" :key="i"
-                          @itemChecked="checkItem"/>
-            <!-- <v-card>
+        <v-layout row wrap>
+          <todoItemCard :item="todoItem" v-for="(todoItem, i) in todoItems" :key="i" @itemChecked="checkItem" />
+          <!-- <v-card>
               Welcome
             </v-card> -->
-            <v-btn fixed absolute bottom fab dark right @click.native="addTask()" color="indigo" >
-              <v-icon>add</v-icon>
-            </v-btn>
-          </v-layout>
+          <v-btn fixed absolute bottom fab dark right @click.native="addTask()" color="indigo">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </v-layout>
       </v-container>
     </v-content>
   </v-app>
@@ -38,9 +36,16 @@ export default {
     todoItem
   },
   created() {
-    this.refreshTasks()
-    // restClient.DeleteAll(todo => this.todoItems = todo);
-    // restClient.DeleteAll(console.log)
+    restClient.DeleteAll()
+    // restClient.Update(5119797780021248, {
+    //   id: "5119797780021248",
+    //   title: "abcdef",
+    //   description: "new Description",
+    //   status: 0,
+    //   creationDate: "2018-02-19T12:27:59.700008Z",
+    //   modificationDate: "2018-02-19T12:27:59.700008Z"
+    // }, console.log);
+    this.refreshTasks();
   },
   data() {
     return {
@@ -52,16 +57,19 @@ export default {
   },
   methods: {
     addTask() {
-      restClient.Create({
-        title:"newTask",
-        description: "new Description"
-      }, this.refreshTasks)
+      restClient.Create(
+        {
+          title: "newTask",
+          description: "new Description"
+        },
+        this.refreshTasks
+      );
     },
     refreshTasks() {
       restClient.GetAll(todo => (this.todoItems = todo));
     },
     checkItem(item) {
-      item.status = (item.status + 1) % 2
+      item.status = (item.status + 1) % 2;
     }
   }
 };

@@ -36,15 +36,6 @@ export default {
     todoItem
   },
   created() {
-    restClient.DeleteAll()
-    // restClient.Update(5119797780021248, {
-    //   id: "5119797780021248",
-    //   title: "abcdef",
-    //   description: "new Description",
-    //   status: 0,
-    //   creationDate: "2018-02-19T12:27:59.700008Z",
-    //   modificationDate: "2018-02-19T12:27:59.700008Z"
-    // }, console.log);
     this.refreshTasks();
   },
   data() {

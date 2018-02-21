@@ -1,7 +1,6 @@
 import axios from "axios"
 
 const hostname = 'https://go-back-sample.appspot.com'
-// const hostname = 'http://localhost:8020'
 
 axios.defaults.baseURL = hostname
 
@@ -26,11 +25,5 @@ export function Delete(id) {
 }
 
 export function DeleteAll() {
-  // axios.delete("/tasks")
-  axios.request({
-    method: 'delete',
-    url:"/tasks",
-    data:null,
-    crossdomain:true
-  })
+  axios.delete("/tasks")
 }

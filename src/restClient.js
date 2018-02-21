@@ -26,11 +26,5 @@ export function Delete(id) {
 }
 
 export function DeleteAll() {
-  // axios.delete("/tasks")
-  axios.request({
-    method: 'delete',
-    url:"/tasks",
-    data:null,
-    crossdomain:true
-  })
+  axios.delete("/tasks")
 }

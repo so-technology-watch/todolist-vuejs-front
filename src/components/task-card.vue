@@ -1,10 +1,10 @@
 <template>
-  <v-flex xs3 @mouseover="isHover = true" @mouseout="isHover = false" :value="item.title">
+  <v-flex xs3 @mouseover="isHover = true" @mouseout="isHover = false" :value="task.title">
     <v-card tile>
-      <v-card-title primary class="title">{{item.title}}</v-card-title>
-      <v-card-text>{{item.description}}</v-card-text>
+      <v-card-title primary class="title">{{task.title}}</v-card-title>
+      <v-card-text>{{task.description}}</v-card-text>
       <v-card-actions v-if="isHover">
-        <v-btn fab flat :color="item.status == 1 ? 'green' : ''" @click="checkItem()">
+        <v-btn fab flat :color="task.status == 1 ? 'green' : ''">
           <v-icon>check_circle</v-icon>
         </v-btn>
       </v-card-actions>
@@ -14,8 +14,8 @@
 
 <script>
 export default {
-  name: "todoItem-card",
-  props: ["item"],
+  name: "task-card",
+  props: ["task"],
   data() {
     return {
       isHover: false

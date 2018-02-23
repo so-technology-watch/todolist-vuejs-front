@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer fixed :clipped=true v-model="drawer" app>
       <v-list>
-        <todoItem :task="todoItem" :value="todoItem.title" v-for="(todoItem, i) in todoItems" :key="i" />
+        <taskListItem :task="task" :value="task.title" v-for="(task, i) in taskList" :key="i" />
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app :clipped-left=true>
@@ -12,10 +12,7 @@
     <v-content>
       <v-container grid-list-md>
         <v-layout row wrap>
-          <todoItemCard :item="todoItem" v-for="(todoItem, i) in todoItems" :key="i" @itemChecked="checkItem" />
-          <!-- <v-card>
-              Welcome
-            </v-card> -->
+          <taskCard :task="task" v-for="(task, i) in taskList" :key="i"/>
           <v-btn fixed absolute bottom fab dark right @click.native="addTask()" color="indigo">
             <v-icon>add</v-icon>
           </v-btn>
@@ -26,23 +23,22 @@
 </template>
 
 <script>
-import todoItemCard from "./components/todoItem-card.vue";
-import todoItem from "./components/todoItem.vue";
+import taskCard from "./components/task-card.vue";
+import taskListItem from "./components/task-listItem.vue";
 import * as restClient from "./restClient";
 
 export default {
   components: {
-    todoItemCard,
-    todoItem
+    taskListItem,
+    taskCard
   },
   created() {
     this.refreshTasks();
   },
   data() {
     return {
-      currentContent: { compo: "todoItem-content", item: "selectedItem" },
       drawer: true,
-      todoItems: [],
+      taskList: [],
       selectedItem: null
     };
   },
@@ -57,10 +53,7 @@ export default {
       );
     },
     refreshTasks() {
-      restClient.GetAll(todo => (this.todoItems = todo));
-    },
-    checkItem(item) {
-      item.status = (item.status + 1) % 2;
+      restClient.GetAll(list => (this.taskList = list));
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <v-list-group>
-    <v-list-tile slot="item" @click="selectItem(task)">
+    <v-list-tile slot="item">
       <v-list-tile-action>
         <v-icon :color="taskColor" dark>check_circle</v-icon>
       </v-list-tile-action>

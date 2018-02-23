@@ -5,26 +5,26 @@ const hostname = 'https://go-back-sample.appspot.com'
 
 axios.defaults.baseURL = hostname
 
-export function GetAll(callback) {
-  axios.get("/tasks").then(x => callback(x.data))
+export function GetAll() {
+  return axios.get("/tasks").then(x => x.data)
 }
 
-export function Get(id, callback) {
-  axios.get("/tasks/"+id).then(x => callback(x.data))
+export function Get(id) {
+  return axios.get("/tasks/"+id).then(x => x.data)
 }
 
-export function Create(obj, callback) {
-  axios.post("/tasks", JSON.stringify(obj)).then(x => callback(x.data))
+export function Create(obj) {
+  return axios.post("/tasks", JSON.stringify(obj))
 }
 
-export function Update(id, obj, callback) {
-  axios.put("/tasks/"+id, JSON.stringify(obj)).then(x => callback(x.data))
+export function Update(id, obj) {
+  return axios.put("/tasks/"+id, JSON.stringify(obj))
 }
 
 export function Delete(id) {
-  axios.delete("/tasks/"+id)
+  return axios.delete("/tasks/"+id)
 }
 
 export function DeleteAll() {
-  axios.delete("/tasks")
+  return axios.delete("/tasks")
 }

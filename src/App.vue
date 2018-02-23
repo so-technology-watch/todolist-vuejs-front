@@ -13,9 +13,7 @@
       <v-container grid-list-md>
         <v-layout row wrap>
           <taskCard :task="task" v-for="(task, i) in taskList" :key="i"/>
-          <v-btn fixed absolute bottom fab dark right @click.native="addTask()" color="indigo">
-            <v-icon>add</v-icon>
-          </v-btn>
+          <addTaskDialog @closed="addTask"/>
         </v-layout>
       </v-container>
     </v-content>
@@ -25,12 +23,14 @@
 <script>
 import taskCard from "./components/task-card.vue";
 import taskListItem from "./components/task-listItem.vue";
+import addTaskDialog from "./components/addTask-dialog.vue";
 import * as restClient from "./restClient";
 
 export default {
   components: {
     taskListItem,
-    taskCard
+    taskCard,
+    addTaskDialog
   },
   created() {
     this.refreshTasks();
@@ -43,17 +43,13 @@ export default {
     };
   },
   methods: {
-    addTask() {
-      restClient.Create(
-        {
-          title: "newTask",
-          description: "new Description"
-        },
-        this.refreshTasks
-      );
+    addTask(task) {
+      if (task != null) {
+        restClient.Create(task).then(() => this.refreshTasks())
+      }
     },
     refreshTasks() {
-      restClient.GetAll(list => (this.taskList = list));
+      return restClient.GetAll().then(list => (this.taskList = list))
     }
   }
 };

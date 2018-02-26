@@ -12,10 +12,10 @@
     <v-content>
       <v-container grid-list-md>
         <v-layout row wrap>
-          <taskCard :task="task" v-for="(task, i) in taskList" :key="i"/>
-          <addTaskDialog @closed="addTask"/>
+          <taskCard :task="task" v-for="(task, i) in taskList" :key="i" @taskEdit="taskEdit" />
         </v-layout>
       </v-container>
+      <taskDialog @closed="handleDialogClosed" :editedItem="editedItem" />
     </v-content>
   </v-app>
 </template>
@@ -23,33 +23,52 @@
 <script>
 import taskCard from "./components/task-card.vue";
 import taskListItem from "./components/task-listItem.vue";
-import addTaskDialog from "./components/addTask-dialog.vue";
+import taskDialog from "./components/task-dialog.vue";
 import * as restClient from "./restClient";
 
 export default {
   components: {
     taskListItem,
     taskCard,
-    addTaskDialog
+    taskDialog
   },
   created() {
     this.refreshTasks();
   },
   data() {
     return {
+      editedItem: null,
       drawer: true,
       taskList: [],
       selectedItem: null
     };
   },
   methods: {
-    addTask(task) {
+    handleDialogClosed(task) {
+      this.editedItem = null;
       if (task != null) {
-        restClient.Create(task).then(() => this.refreshTasks())
+        if (task.id != null) {
+          this.updateTask(task);
+        } else {
+          this.addTask(task);
+        }
       }
     },
+    addTask(task) {
+      if (task != null) {
+        restClient.Create(task).then(() => this.refreshTasks());
+      }
+    },
+    updateTask(task) {
+      if (task != null) {
+        restClient.Update(task.id, task).then(() => this.refreshTasks());
+      }
+    },
+    taskEdit(task) {
+      this.editedItem = task
+    },
     refreshTasks() {
-      return restClient.GetAll().then(list => (this.taskList = list))
+      return restClient.GetAll().then(list => (this.taskList = list));
     }
   }
 };

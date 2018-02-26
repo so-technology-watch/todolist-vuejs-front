@@ -3,9 +3,9 @@
     <v-card tile>
       <v-card-title primary class="title">{{task.title}}</v-card-title>
       <v-card-text>{{task.description}}</v-card-text>
-      <v-card-actions v-if="isHover">
-        <v-btn fab flat :color="task.status == 1 ? 'green' : ''">
-          <v-icon>check_circle</v-icon>
+      <v-card-actions>
+        <v-btn flat small fab @click="edit">
+          <v-icon v-if="isHover" :color="task.status == 1 ? 'green' : ''">edit</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -23,7 +23,10 @@ export default {
   },
   methods: {
     checkItem() {
-      this.$emit("itemChecked", this.item);
+      this.$emit("itemChecked", this.task);
+    },
+    edit() {
+      this.$emit("taskEdit", this.task)
     }
   }
 };

@@ -29,21 +29,20 @@ export default {
     return {
       active: false,
       title: "",
-      description: ""
+      description: "",
+      taskDescription: "",
+      taskTitle: "",
     };
-  },
-  computed: {
-    taskDescription: function() {
-      return this.task == null ? "" : this.task.description
-    },
-    taskTitle: function() {
-      return this.task == null ? "" : this.task.title
-    }
   },
   watch: {
     active: function(val) {
       if (val == false) {
         this.save();
+      } else {
+        if (this.task == null) {
+          this.taskTitle = ""
+          this.taskDescription = ""
+        }
       }
     },
     task: function(val) {
@@ -55,6 +54,9 @@ export default {
         this.title = ""
         this.description = ""
       }
+      this.taskDescription = this.description
+      this.taskTitle = this.title
+      console.log("taskDetails updated")
     }
   },
   methods: {
@@ -62,17 +64,20 @@ export default {
       this.$emit("closed", null);
     },
     save: function() {
+      this.taskTitle = this.title
+      this.taskDescription = this.description
       if (this.task != null && this.task.id != null) {
-        this.task.title = this.title;
-        this.task.description = this.description;
-        this.$emit("closed", this.task);
+        let modifiedTask = this.task
+        modifiedTask.title = this.title;
+        modifiedTask.description = this.description;
+        this.$emit("closed", modifiedTask);
       } else {
         this.$emit("closed", {
           title: this.title,
           description: this.description
         });
       }
-      this.active = false;
+      // this.taskTitle = ""
     }
   }
 };

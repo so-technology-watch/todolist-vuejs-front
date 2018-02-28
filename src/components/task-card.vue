@@ -1,6 +1,6 @@
 <template>
-  <v-flex xs3 @mouseover="isHover = true" @mouseout="isHover = false" :value="task.title" >
-    <v-card class="taskCard" raised>
+  <v-flex xs3 :value="task.title" >
+    <v-card class="taskCard" @mouseover="isHover = true" @mouseout="isHover = false">
       <v-card-title class="cardTitle">{{task.title}}</v-card-title>
       <v-card-text class="cardText" style="white-space: pre-wrap;">{{task.description}}</v-card-text>
       <v-card-actions>

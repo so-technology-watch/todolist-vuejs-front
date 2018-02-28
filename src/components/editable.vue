@@ -8,7 +8,9 @@ export default {
   props: ["content", "placeholder"],
   watch: {
     content: function(val) {
+      console.log("content updated", val)
       this.$el.innerText = val;
+      this.$emit("update", val);
     }
   },
   methods: {

@@ -12,6 +12,9 @@
 </template>
 
 <script>
+
+import * as tools from "../tools.js"
+
 export default {
   name: "task-listItem",
   props: ["task"],
@@ -21,19 +24,7 @@ export default {
     }
   },
   computed: {
-    taskColor: function() {
-      switch (this.task.status) {
-        case 1:
-          return 'orange'
-          break;
-        case 2:
-          return 'green'
-          break;
-        default:
-          return ''
-          break;
-      }
-    }
+    taskColor: tools.taskColor
   }
 };
 </script>

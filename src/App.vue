@@ -1,21 +1,21 @@
 <template>
   <v-app>
-    <v-navigation-drawer fixed :clipped=true v-model="drawer" app>
+    <v-navigation-drawer fixed clipped v-model="drawer" app>
       <v-list>
-        <taskListItem :task="task" :value="task.title" v-for="(task, i) in taskList" :key="i" />
+        <taskListItem :task="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i" />
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar fixed app :clipped-left=true>
+    <v-toolbar fixed app clipped-left color="indigo" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TodoList</v-toolbar-title>
     </v-toolbar>
     <v-content>
-      <v-container grid-list-md>
+      <v-container fluid grid-list-lg>
         <v-layout row wrap>
-          <taskCard :task="task" v-for="(task, i) in taskList" :key="i" @taskEdit="taskEdit" />
+          <taskCard :task="task" v-for="(task, i) in sortedTaskList" :key="i" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
         </v-layout>
       </v-container>
-      <taskDialog @closed="handleDialogClosed" :editedItem="editedItem" />
+      <taskDialog @closed="handleDialogClosed" :task="editedItem" />
     </v-content>
   </v-app>
 </template>
@@ -43,10 +43,17 @@ export default {
       selectedItem: null
     };
   },
+  computed: {
+    sortedTaskList: function() {
+      return this.taskList.sort((a, b) => {
+        return a.creationDate > b.creationDate;
+      });
+    }
+  },
   methods: {
     handleDialogClosed(task) {
       this.editedItem = null;
-      if (task != null) {
+      if (task != null && !(task.title == "" && task.description == "")) {
         if (task.id != null) {
           this.updateTask(task);
         } else {
@@ -55,17 +62,19 @@ export default {
       }
     },
     addTask(task) {
-      if (task != null) {
-        restClient.Create(task).then(() => this.refreshTasks());
-      }
+      restClient.Create(task).then(() => this.refreshTasks());
     },
     updateTask(task) {
-      if (task != null) {
-        restClient.Update(task.id, task).then(() => this.refreshTasks());
-      }
+      restClient.Update(task.id, task).then(() => this.refreshTasks());
     },
     taskEdit(task) {
-      this.editedItem = task
+      this.editedItem = task;
+    },
+    taskDelete(task) {
+      restClient.Delete(task.id).then(this.refreshTasks);
+    },
+    statusChanged(task) {
+      restClient.Update(task.id, task).then(this.refreshTasks);
     },
     refreshTasks() {
       return restClient.GetAll().then(list => (this.taskList = list));

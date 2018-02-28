@@ -4,17 +4,12 @@
       <v-icon>add</v-icon>
     </v-btn>
     <v-card>
-      <v-form v-model="valid" ref="form" lazy-validation>
-        <v-card-title>
-          <v-text-field class="titleForm" label="Title" v-model="title" :rules="[v => !!v || 'Title is required']" />
-        </v-card-title>
-        <v-card-text>
-          <v-text-field label="Description" v-model="description" multi-line/>
-        </v-card-text>
+      <v-form ref="form" id="taskForm">
+        <editable class="titleForm" :content.sync="title" placeholder="Title" />
+        <editable class="descriptionForm" :content.sync="description" placeholder="Description" />
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue" flat @click.native="close">Close</v-btn>
-          <v-btn color="blue" flat @click.native="save" :disabled="!valid">Save</v-btn>
+          <v-btn color="blue" flat @click.native="active = false">Ok</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -22,61 +17,70 @@
 </template>
 
 <script>
+import editable from "./editable.vue";
+
 export default {
   name: "task-dialog",
-  props: ["editedItem"],
+  props: ["task"],
+  components: {
+    editable
+  },
   data() {
     return {
-      valid: true,
       active: false,
       title: "",
       description: ""
     };
   },
   watch: {
-    editedItem: function(val) {
-      if (this.editedItem == null) {
-        this.active = false;
-      } else {
-        this.title = this.editedItem.title;
-        this.description = this.editedItem.description;
+    active: function(val) {
+      if (val == false) {
+        this.save();
+      }
+    },
+    task: function(val) {
+      if (val != null) {
         this.active = true;
+        this.title = this.task.title;
+        this.description = this.task.description;
+      } else {
+        this.title = ""
+        this.description = ""
       }
     }
   },
   methods: {
     close: function() {
-      this.active = false;
       this.$emit("closed", null);
-      this.clear();
     },
     save: function() {
-      if (this.$refs.form.validate()) {
-        this.active = false;
-        if (this.editedItem != null) {
-          this.editedItem.title = this.title;
-          this.editedItem.description = this.description;
-          this.$emit("closed", this.editedItem);
-        } else {
-          this.$emit("closed", {
-            title: this.title,
-            description: this.description
-          });
-        }
-        this.clear();
+      if (this.task != null && this.task.id != null) {
+        this.task.title = this.title;
+        this.task.description = this.description;
+        this.$emit("closed", this.task);
+      } else {
+        this.$emit("closed", {
+          title: this.title,
+          description: this.description
+        });
       }
-    },
-    clear: function() {
-      this.title = "";
-      this.description = "";
+      this.active = false;
     }
   }
 };
 </script>
 
 <style>
+#taskForm {
+  padding-top: 20px;
+}
 .titleForm {
-  font-size: 20;
+  font-size: 20px;
   font-weight: bold;
+  margin-bottom: 10px;
+}
+.descriptionForm {
+  font-size: 16px;
 }
 </style>
+ 

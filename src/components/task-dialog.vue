@@ -5,8 +5,8 @@
     </v-btn>
     <v-card>
       <v-form ref="form" id="taskForm">
-        <editable class="titleForm" :content.sync="title" placeholder="Title" />
-        <editable class="descriptionForm" :content.sync="description" placeholder="Description" />
+        <editable class="titleForm" :content="taskTitle" @update="val => title = val" placeholder="Title" />
+        <editable class="descriptionForm" :content="taskDescription" @update="val => description = val" placeholder="Description" />
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue" flat @click.native="active = false">Ok</v-btn>
@@ -31,6 +31,14 @@ export default {
       title: "",
       description: ""
     };
+  },
+  computed: {
+    taskDescription: function() {
+      return this.task == null ? "" : this.task.description
+    },
+    taskTitle: function() {
+      return this.task == null ? "" : this.task.title
+    }
   },
   watch: {
     active: function(val) {

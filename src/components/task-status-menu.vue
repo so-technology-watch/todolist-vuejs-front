@@ -4,22 +4,22 @@
       <v-icon :color="taskColor">check_circle</v-icon>
     </v-btn>
     <v-list dense>
-      <v-chip color="grey" text-color="white" @click="statusChange(0)">
-        <v-avatar>
-          <v-icon>check_circle</v-icon>
-        </v-avatar>
-        Todo
-      </v-chip>
-      <v-chip color="orange" text-color="white" @click="statusChange(1)">
+      <v-chip color="orange" text-color="white" @click="statusChange(1)" v-if="status != 1">
         <v-avatar>
           <v-icon>check_circle</v-icon>
         </v-avatar>Doing
       </v-chip>
-      <v-chip color="green" text-color="white" @click="statusChange(2)">
+      <v-chip color="green" text-color="white" @click="statusChange(2)" v-if="status != 2">
         <v-avatar>
           <v-icon>check_circle</v-icon>
         </v-avatar>
         Done
+      </v-chip>
+      <v-chip color="grey" text-color="white" @click="statusChange(0)" v-if="status != 0">
+        <v-avatar>
+          <v-icon>check_circle</v-icon>
+        </v-avatar>
+        Todo
       </v-chip>
     </v-list>
   </v-menu>

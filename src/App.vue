@@ -11,22 +11,22 @@
     <v-toolbar fixed app clipped-left color="indigo" dark>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TodoList</v-toolbar-title>
+      <!-- <v-text-field
+        flat
+        solo-inverted
+        prepend-icon="search"
+        label="Search"
+        class="hidden-sm-and-down"
+      /> -->
+      <v-spacer/>
     </v-toolbar>
     <!-- Column version -->
-    <v-content style="display:block;">
-      <div id="columns">
-        <div class="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i">
+    <v-content>
+      <div id="masonryDiv" v-masonry transition-duration="0.3s" item-selector=".item">
+        <div v-masonry-tile class="item" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i">
           <taskCard :task="task" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
         </div>
       </div>
-      <!-- Flex version -->
-      <!-- <v-container fluid grid-list-lg>
-        <v-layout row wrap>
-          <v-flex xs3 :value="task.title" v-for="(task, i) in sortedTaskList" :key="i">
-            <taskCard :task="task" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
-          </v-flex>
-        </v-layout>
-      </v-container> -->
       <taskDialog @closed="handleDialogClosed" :task="editedItem" />
     </v-content>
   </v-app>
@@ -43,6 +43,11 @@ export default {
     taskListItem,
     taskCard,
     taskDialog
+  },
+  watch: {
+    taskList: function() {
+      this.$redrawVueMasonry()
+    }
   },
   created() {
     this.refreshTasks();
@@ -96,16 +101,13 @@ export default {
 </script>
 
 <style>
-#columns {
-  column-width: 240px;
-  column-count: 4;
-  column-fill: balance;
-  width: 90%;
-  margin: 25px auto;
+/* https://github.com/shershen08/vue-masonry */
+.item {
+  /* max-width: 280px;  */
+  min-width: 240px;
+  margin: 10px;
 }
-div.task {
-  width: 240px;
-  margin: 7px;
-  display: inline-block;
+#masonryDiv {
+  margin: 10px;
 }
 </style>

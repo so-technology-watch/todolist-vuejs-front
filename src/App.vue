@@ -9,12 +9,21 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>TodoList</v-toolbar-title>
     </v-toolbar>
-    <v-content>
-      <v-container fluid grid-list-lg>
+    <!-- Column version -->
+    <v-content style="display:block;">
+      <div id="columns">
+        <div class="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i">
+          <taskCard :task="task" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
+        </div>
+      </div>
+      <!-- Flex version -->
+      <!-- <v-container fluid grid-list-lg>
         <v-layout row wrap>
-          <taskCard :task="task" v-for="(task, i) in sortedTaskList" :key="i" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
+          <v-flex xs3 :value="task.title" v-for="(task, i) in sortedTaskList" :key="i">
+            <taskCard :task="task" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
+          </v-flex>
         </v-layout>
-      </v-container>
+      </v-container> -->
       <taskDialog @closed="handleDialogClosed" :task="editedItem" />
     </v-content>
   </v-app>
@@ -82,3 +91,18 @@ export default {
   }
 };
 </script>
+
+<style>
+#columns {
+  column-width: 240px;
+  column-count: 4;
+  column-fill: balance;
+  width: 90%;
+  margin: 25px auto;
+}
+div.task {
+  width: 240px;
+  margin: 7px;
+  display: inline-block;
+}
+</style>

@@ -1,38 +1,36 @@
 <template>
-  <v-flex xs3 :value="task.title" >
-    <v-card class="taskCard" @mouseover="isHover = true" @mouseout="isHover = false">
-      <v-card-title class="cardTitle">{{task.title}}</v-card-title>
-      <v-card-text class="cardText" style="white-space: pre-wrap;">{{task.description}}</v-card-text>
-      <v-card-actions>
-        <v-btn flat small fab @click="edit">
-          <v-icon v-if="isHover">edit</v-icon>
+  <v-card @mouseover="isHover = true" @mouseout="isHover = false">
+    <v-card-title class="cardTitle">{{task.title}}</v-card-title>
+    <v-card-text class="cardText" style="white-space: pre-wrap;">{{task.description}}</v-card-text>
+    <v-card-actions>
+      <v-btn flat small fab @click="edit">
+        <v-icon v-if="isHover">edit</v-icon>
+      </v-btn>
+      <v-btn flat small fab @click="del">
+        <v-icon v-if="isHover">delete</v-icon>
+      </v-btn>
+      <v-spacer/>
+      <v-menu>
+        <v-btn slot="activator" icon>
+          <v-icon :color="taskColor">check_circle</v-icon>
         </v-btn>
-        <v-btn flat small fab @click="del">
-          <v-icon v-if="isHover">delete</v-icon>
-        </v-btn>
-        <v-spacer/>
-        <v-menu>
-          <v-btn slot="activator" icon>
-            <v-icon :color="taskColor">check_circle</v-icon>
-          </v-btn>
-          <v-list>
-            <v-list-tile @click="statusChange(0)">
-              <v-icon>check_circle</v-icon>
-              <v-list-tile-title> Todo</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="statusChange(1)">
-              <v-icon color="orange">check_circle</v-icon>
-              <v-list-tile-title> Doing</v-list-tile-title>
-            </v-list-tile>
-            <v-list-tile @click="statusChange(2)">
-              <v-icon color="green">check_circle</v-icon>
-              <v-list-tile-title> Done</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-      </v-card-actions>
-    </v-card>
-  </v-flex>
+        <v-list>
+          <v-list-tile @click="statusChange(0)">
+            <v-icon>check_circle</v-icon>
+            <v-list-tile-title> Todo</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="statusChange(1)">
+            <v-icon color="orange">check_circle</v-icon>
+            <v-list-tile-title> Doing</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="statusChange(2)">
+            <v-icon color="green">check_circle</v-icon>
+            <v-list-tile-title> Done</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
@@ -67,6 +65,7 @@ export default {
 <style>
 .cardText {
   word-wrap: break-word;
+  padding: 0 16px;
 }
 .cardTitle {
   font-size: 20px;

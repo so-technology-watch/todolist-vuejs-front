@@ -56,7 +56,6 @@ export default {
       }
       this.taskDescription = this.description
       this.taskTitle = this.title
-      console.log("taskDetails updated")
     }
   },
   methods: {
@@ -77,7 +76,6 @@ export default {
           description: this.description
         });
       }
-      // this.taskTitle = ""
     }
   }
 };

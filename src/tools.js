@@ -1,5 +1,5 @@
-export function taskColor() {
-    switch (this.task.status) {
+export function taskColor(status) {
+    switch (status) {
         case 1:
             return 'orange'
             break;

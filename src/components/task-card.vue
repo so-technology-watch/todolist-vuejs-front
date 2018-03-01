@@ -10,42 +10,24 @@
         <v-icon v-if="isHover">delete</v-icon>
       </v-btn>
       <v-spacer/>
-      <v-menu>
-        <v-btn slot="activator" icon>
-          <v-icon :color="taskColor">check_circle</v-icon>
-        </v-btn>
-        <v-list>
-          <v-list-tile @click="statusChange(0)">
-            <v-icon>check_circle</v-icon>
-            <v-list-tile-title> Todo</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile @click="statusChange(1)">
-            <v-icon color="orange">check_circle</v-icon>
-            <v-list-tile-title> Doing</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile @click="statusChange(2)">
-            <v-icon color="green">check_circle</v-icon>
-            <v-list-tile-title> Done</v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
+      <taskStatusMenu @statusChanged="statusChange" :status="task.status"/>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
-import * as tools from "../tools.js";
+import taskStatusMenu from "./task-status-menu.vue";
 
 export default {
   name: "task-card",
   props: ["task"],
+  components: {
+    taskStatusMenu
+  },
   data() {
     return {
       isHover: false
     };
-  },
-  computed: {
-    taskColor: tools.taskColor
   },
   methods: {
     edit() {

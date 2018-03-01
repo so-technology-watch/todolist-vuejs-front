@@ -2,7 +2,10 @@
   <v-app>
     <v-navigation-drawer fixed clipped v-model="drawer" app>
       <v-list>
-        <taskListItem :task="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i" />
+        <taskListItem :task="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i" 
+        @statusChanged="statusChanged" 
+        @taskEdit="taskEdit" 
+        @taskDelete="taskDelete" />
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app clipped-left color="indigo" dark>

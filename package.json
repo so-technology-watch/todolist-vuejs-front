@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "masonry-layout": "^4.2.1",
-    "mdi": "^2.1.19",
     "vue": "^2.5.3",
     "vuetify": "^0.17.4"
   },

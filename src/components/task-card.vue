@@ -1,7 +1,7 @@
 <template>
-  <v-card @mouseover="isHover = true" @mouseout="isHover = false">
-    <v-card-title class="cardTitle">{{task.title}}</v-card-title>
-    <v-card-text class="cardText" style="white-space: pre-wrap;">{{task.description}}</v-card-text>
+  <v-card @mouseover="isHover = true" @mouseout="isHover = false" >
+    <v-card-title class="cardTitle" @click="edit">{{task.title}}</v-card-title>
+    <v-card-text class="cardText" @click="edit">{{task.description}}</v-card-text>
     <v-card-actions>
       <v-btn flat small fab @click="edit">
         <v-icon v-if="isHover">edit</v-icon>
@@ -48,6 +48,7 @@ export default {
 .cardText {
   word-wrap: break-word;
   padding: 0 16px;
+  white-space: pre-wrap;
 }
 .cardTitle {
   font-size: 20px;

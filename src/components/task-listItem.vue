@@ -5,7 +5,7 @@
         <taskStatusMenu @statusChanged="statusChange" :status="task.status"/>
       </v-list-tile-action>
       <v-list-tile-content>
-        <v-list-tile-title>{{ task.title }}</v-list-tile-title>
+        <v-list-tile-title @click="edit">{{ task.title }}</v-list-tile-title>
       </v-list-tile-content>
       <v-list-tile-action>
         <v-menu offset-y>

@@ -2,25 +2,19 @@
   <v-app>
     <v-navigation-drawer fixed clipped v-model="drawer" app>
       <v-list>
-        <taskListItem :task="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i" 
-        @statusChanged="statusChanged" 
-        @taskEdit="taskEdit" 
-        @taskDelete="taskDelete" />
+        <taskListItem :task="task" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i" @statusChanged="statusChanged" @taskEdit="taskEdit" @taskDelete="taskDelete" />
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app clipped-left color="indigo" dark>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title>TodoList</v-toolbar-title>
-      <!-- <v-text-field
-        flat
-        solo-inverted
-        prepend-icon="search"
-        label="Search"
-        class="hidden-sm-and-down"
-      /> -->
+      <v-toolbar-title class="hidden-sm-and-down">
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        TodoList
+      </v-toolbar-title>
+      <v-toolbar-items id="searchBar">
+        <v-text-field solo-inverted prepend-icon="search" label="Search" v-model="searchText" clearable flat/>
+      </v-toolbar-items>
       <v-spacer/>
     </v-toolbar>
-    <!-- Column version -->
     <v-content>
       <div id="masonryDiv" v-masonry transition-duration="0.3s" item-selector=".item">
         <div v-masonry-tile class="item" :value="task.title" v-for="(task, i) in sortedTaskList" :key="i">
@@ -46,7 +40,7 @@ export default {
   },
   watch: {
     taskList: function() {
-      this.$redrawVueMasonry()
+      this.$redrawVueMasonry();
     }
   },
   created() {
@@ -57,12 +51,22 @@ export default {
       editedItem: null,
       drawer: true,
       taskList: [],
-      selectedItem: null
+      filteredTaskList: [],
+      selectedItem: null,
+      searchText: ""
     };
+  },
+  watch: {
+    searchText: function(val) {
+      this.refreshFilteredList()
+    },
+    taskList: function(val) {
+      this.refreshFilteredList()
+    }
   },
   computed: {
     sortedTaskList: function() {
-      return this.taskList.sort((a, b) => {
+      return this.filteredTaskList.sort((a, b) => {
         return a.creationDate > b.creationDate;
       });
     }
@@ -95,6 +99,16 @@ export default {
     },
     refreshTasks() {
       return restClient.GetAll().then(list => (this.taskList = list));
+    },
+    refreshFilteredList() {
+      if (this.searchText != null && this.searchText != "") {
+        this.filteredTaskList = this.taskList.filter(task => {
+          return task.title.includes(this.searchText) || task.description.includes(this.searchText)
+        })
+      }
+      else {
+        this.filteredTaskList = this.taskList
+      }
     }
   }
 };
@@ -103,11 +117,16 @@ export default {
 <style>
 /* https://github.com/shershen08/vue-masonry */
 .item {
-  /* max-width: 280px;  */
-  min-width: 240px;
+  width: 240px;
+  /* max-width: 280px; 
+  min-width: 240px; */
   margin: 10px;
 }
 #masonryDiv {
   margin: 10px;
+}
+#searchBar {
+  margin-left: 150px;
+  width: 40%;
 }
 </style>

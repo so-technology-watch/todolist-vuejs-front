@@ -11,7 +11,7 @@
         TodoList
       </v-toolbar-title>
       <v-toolbar-items id="searchBar">
-        <v-text-field solo-inverted prepend-icon="search" label="Search" v-model="searchText" clearable flat/>
+        <v-text-field solo-inverted prepend-icon="search" label="Search" v-model="searchText" clearable flat color="white" :loading="searchLoading"/>
       </v-toolbar-items>
       <v-spacer/>
     </v-toolbar>
@@ -53,7 +53,8 @@ export default {
       taskList: [],
       filteredTaskList: [],
       selectedItem: null,
-      searchText: ""
+      searchText: "",
+      searchLoading: false
     };
   },
   watch: {
@@ -102,9 +103,11 @@ export default {
     },
     refreshFilteredList() {
       if (this.searchText != null && this.searchText != "") {
+        this.searchLoading = true
         this.filteredTaskList = this.taskList.filter(task => {
           return task.title.includes(this.searchText) || task.description.includes(this.searchText)
         })
+        this.searchLoading = false
       }
       else {
         this.filteredTaskList = this.taskList

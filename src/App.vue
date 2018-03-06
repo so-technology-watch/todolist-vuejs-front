@@ -74,7 +74,6 @@ export default {
   },
   methods: {
     handleDialogClosed(task) {
-      this.editedItem = null;
       if (task != null && !(task.title == "" && task.description == "")) {
         if (task.id != null) {
           this.updateTask(task);
@@ -82,6 +81,10 @@ export default {
           this.addTask(task);
         }
       }
+      //Wait until transition is finished
+      setTimeout(() => {
+        this.editedItem = null;
+      }, 150)
     },
     addTask(task) {
       restClient.Create(task).then(() => this.refreshTasks());
@@ -93,6 +96,7 @@ export default {
       this.editedItem = task;
     },
     taskDelete(task) {
+      this.taskList = this.taskList.filter(item => item != task)
       restClient.Delete(task.id).then(this.refreshTasks);
     },
     statusChanged(task) {

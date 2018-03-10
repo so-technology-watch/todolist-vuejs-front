@@ -11,7 +11,7 @@
         TodoList
       </v-toolbar-title>
       <v-toolbar-items id="searchBar">
-        <v-text-field solo-inverted prepend-icon="search" label="Search" v-model="searchText" clearable flat/>
+        <v-text-field solo-inverted prepend-icon="search" label="Search" v-model="searchText" clearable flat color="white" :loading="searchLoading"/>
       </v-toolbar-items>
       <v-spacer/>
     </v-toolbar>
@@ -53,7 +53,8 @@ export default {
       taskList: [],
       filteredTaskList: [],
       selectedItem: null,
-      searchText: ""
+      searchText: "",
+      searchLoading: false
     };
   },
   watch: {
@@ -73,7 +74,6 @@ export default {
   },
   methods: {
     handleDialogClosed(task) {
-      this.editedItem = null;
       if (task != null && !(task.title == "" && task.description == "")) {
         if (task.id != null) {
           this.updateTask(task);
@@ -81,6 +81,10 @@ export default {
           this.addTask(task);
         }
       }
+      //Wait until transition is finished
+      setTimeout(() => {
+        this.editedItem = null;
+      }, 150)
     },
     addTask(task) {
       restClient.Create(task).then(() => this.refreshTasks());
@@ -92,6 +96,7 @@ export default {
       this.editedItem = task;
     },
     taskDelete(task) {
+      this.taskList = this.taskList.filter(item => item != task)
       restClient.Delete(task.id).then(this.refreshTasks);
     },
     statusChanged(task) {
@@ -102,9 +107,11 @@ export default {
     },
     refreshFilteredList() {
       if (this.searchText != null && this.searchText != "") {
+        this.searchLoading = true
         this.filteredTaskList = this.taskList.filter(task => {
           return task.title.includes(this.searchText) || task.description.includes(this.searchText)
         })
+        this.searchLoading = false
       }
       else {
         this.filteredTaskList = this.taskList

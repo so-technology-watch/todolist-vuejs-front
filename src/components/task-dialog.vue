@@ -9,7 +9,7 @@
         <editable class="descriptionForm" :content="taskDescription" @update="val => description = val" placeholder="Description" />
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue" flat @click.native="active = false">Ok</v-btn>
+          <v-btn color="blue" flat @click.native="save(true)">Ok</v-btn>
         </v-card-actions>
       </v-form>
     </v-card>
@@ -31,17 +31,19 @@ export default {
       title: "",
       description: "",
       taskDescription: "",
-      taskTitle: "",
+      taskTitle: ""
     };
   },
   watch: {
     active: function(val) {
       if (val == false) {
-        this.save();
+        this.taskTitle = this.title;
+        this.taskDescription = this.description;
+        this.close();
       } else {
         if (this.task == null) {
-          this.taskTitle = ""
-          this.taskDescription = ""
+          this.taskTitle = "";
+          this.taskDescription = "";
         }
       }
     },
@@ -51,11 +53,11 @@ export default {
         this.title = this.task.title;
         this.description = this.task.description;
       } else {
-        this.title = ""
-        this.description = ""
+        this.title = "";
+        this.description = "";
       }
-      this.taskDescription = this.description
-      this.taskTitle = this.title
+      this.taskDescription = this.description;
+      this.taskTitle = this.title;
     }
   },
   methods: {
@@ -63,10 +65,11 @@ export default {
       this.$emit("closed", null);
     },
     save: function() {
-      this.taskTitle = this.title
-      this.taskDescription = this.description
+      this.active = false;
+      this.taskTitle = this.title;
+      this.taskDescription = this.description;
       if (this.task != null && this.task.id != null) {
-        let modifiedTask = this.task
+        let modifiedTask = this.task;
         modifiedTask.title = this.title;
         modifiedTask.description = this.description;
         this.$emit("closed", modifiedTask);

@@ -16,6 +16,11 @@
     "vuetify": "^0.17.4"
   },
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "copy-webpack-plugin": "^4.5.1",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
@@ -24,11 +29,7 @@
     "stylus-loader": "^3.0.1",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.5.3",
-    "webpack-dev-server": "^2.9.1",
     "webpack": "^3.6.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-loader": "^7.1.2"
+    "webpack-dev-server": "^2.9.1"
   }
 }

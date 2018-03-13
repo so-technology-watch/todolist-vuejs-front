@@ -87,20 +87,23 @@ export default {
       }, 150)
     },
     addTask(task) {
-      restClient.Create(task).then(() => this.refreshTasks());
+      this.taskList.push(task)
+      restClient.Create(task);
     },
     updateTask(task) {
-      restClient.Update(task.id, task).then(() => this.refreshTasks());
+      this.taskList.filter(t => t.id == task.id)[0] = task
+      restClient.Update(task.id, task);
     },
     taskEdit(task) {
       this.editedItem = task;
     },
     taskDelete(task) {
       this.taskList = this.taskList.filter(item => item != task)
-      restClient.Delete(task.id).then(this.refreshTasks);
+      restClient.Delete(task.id);
     },
     statusChanged(task) {
-      restClient.Update(task.id, task).then(this.refreshTasks);
+      this.taskList.filter(t => t.id == task.id)[0] = task
+      restClient.Update(task.id, task);
     },
     refreshTasks() {
       return restClient.GetAll().then(list => (this.taskList = list));

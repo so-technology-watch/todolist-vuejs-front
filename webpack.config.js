@@ -1,12 +1,11 @@
 var path = require('path')
 var webpack = require('webpack')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './public/js'),
-    publicPath: '/public/js/',
+    publicPath: '/js/',
     filename: 'build.js'
   },
   resolve: {
@@ -16,13 +15,6 @@ module.exports = {
       'public': path.resolve(__dirname, './public')
     }
   },
-  plugins: [
-    new CopyWebpackPlugin([{
-      from: 'index.html',
-      to: '../index.html',
-      toType: 'file'
-    }], {})
-  ],
   module: {
     rules: [
       {
@@ -57,6 +49,7 @@ module.exports = {
     ]
   },
   devServer: {
+    contentBase: path.join(__dirname, "public"),
     historyApiFallback: true,
     noInfo: true
   },

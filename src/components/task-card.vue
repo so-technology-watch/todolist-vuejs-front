@@ -6,8 +6,11 @@
       <v-btn flat small fab @click="edit">
         <v-icon v-if="isHover">edit</v-icon>
       </v-btn>
-      <v-btn flat small fab @click="del">
+      <v-btn flat small fab @click="statusChange(5)">
         <v-icon v-if="isHover">delete</v-icon>
+      </v-btn>
+      <v-btn flat small fab @click="statusChange(4)">
+        <v-icon v-if="isHover">archive</v-icon>
       </v-btn>
       <v-spacer/>
       <taskStatusMenu @statusChanged="statusChange" :status="task.status"/>

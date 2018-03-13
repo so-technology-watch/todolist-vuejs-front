@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="active" max-width="500px">
-    <v-btn fixed bottom fab dark right color="indigo" slot="activator">
+    <v-btn fixed bottom fab dark right color="indigo" slot="activator" v-if="showAddButton">
       <v-icon>add</v-icon>
     </v-btn>
     <v-card>
@@ -21,7 +21,7 @@ import editable from "./editable.vue";
 
 export default {
   name: "task-dialog",
-  props: ["task"],
+  props: ["task", "showAddButton"],
   components: {
     editable
   },

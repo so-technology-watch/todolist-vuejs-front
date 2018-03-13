@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const hostname = 'https://go-back-sample.appspot.com'
+const hostname = 'https://todolist-go-back.appspot.com'
 // const hostname = 'http://localhost:8020'
 
 axios.defaults.baseURL = hostname

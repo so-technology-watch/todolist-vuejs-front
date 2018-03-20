@@ -102,7 +102,10 @@ export default {
     addTask(task) {
       restClient
         .Create(task)
-        .then(serverTask => this.taskList.push(serverTask));
+        .then(serverTask => this.taskList.push(serverTask))
+        .catch(error => {
+          this.addAlert("Connection failure", "error");
+        });
     },
     updateTask(task) {
       this.taskList.filter(t => t.id == task.id)[0] = task;
@@ -111,12 +114,19 @@ export default {
         .then(
           serverTask =>
             (this.taskList.filter(t => t.id == task.id)[0] = serverTask)
-        );
+        )
+        .catch(error => {
+          this.addAlert("Connection failure", "error");
+        });
     },
     deleteTask(task) {
-      this.addAlert("Task was successfully deleted", "info");
       this.taskList = this.taskList.filter(item => item != task);
-      restClient.Delete(task.id);
+      restClient
+        .Delete(task.id)
+        .then(() => this.addAlert("Task was successfully deleted", "info"))
+        .catch(error => {
+          this.addAlert("Connection failure", "error");
+        });
     },
     emptyTrash() {
       this.addAlert("Trash was emptied successfully", "info");

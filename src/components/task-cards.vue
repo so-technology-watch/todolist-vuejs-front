@@ -2,7 +2,7 @@
     <v-content>
       <div id="masonryDiv" v-masonry transition-duration="0.3s" item-selector=".item">
         <div v-masonry-tile class="item" :value="task.title" v-for="(task, i) in taskList" :key="i">
-          <taskCard :task="task" @taskEdit="taskEdit" @taskDelete="taskDelete" @statusChanged="statusChanged" />
+          <taskCard :task="task" @taskEdit="taskEdit" @deleteTask="deleteTask" @statusChangedTask="statusChangedTask" />
         </div>
       </div>
       <taskDialog @closed="handleDialogClosed" :task="editedItem" :showAddButton="showAddButton"/>
@@ -57,21 +57,25 @@ export default {
       }, 150)
     },
     addTask(task) {
+      this.$emit("addTask", task)
       // this.taskList.push(task)
       // restClient.Create(task);
     },
     updateTask(task) {
+      this.$emit("updateTask", task)
       // this.taskList.filter(t => t.id == task.id)[0] = task
       // restClient.Update(task.id, task);
     },
     taskEdit(task) {
       this.editedItem = task;
     },
-    taskDelete(task) {
+    deleteTask(task) {
+      this.$emit("deleteTask", task)
       // this.taskList = this.taskList.filter(item => item != task)
       // restClient.Delete(task.id);
     },
-    statusChanged(task) {
+    statusChangedTask(task) {
+      this.$emit("statusChangedTask", task)
       // this.taskList.filter(t => t.id == task.id)[0] = task
       // restClient.Update(task.id, task);
     },

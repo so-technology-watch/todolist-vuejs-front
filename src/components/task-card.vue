@@ -6,20 +6,23 @@
       <v-btn flat small fab @click="edit">
         <v-icon v-if="isHover">edit</v-icon>
       </v-btn>
-      <v-btn flat small fab @click="statusChange(5)">
+      <v-btn flat small fab @click="statusChangedTask(STATUS.deleted)"
+        v-if="task.status != STATUS.deleted">
         <v-icon v-if="isHover">delete</v-icon>
       </v-btn>
-      <v-btn flat small fab @click="statusChange(4)">
+      <v-btn flat small fab @click="statusChangedTask(STATUS.archived)"
+              v-if="task.status != STATUS.archived">
         <v-icon v-if="isHover">archive</v-icon>
       </v-btn>
       <v-spacer/>
-      <taskStatusMenu @statusChanged="statusChange" :status="task.status"/>
+      <taskStatusMenu @statusChangedTask="statusChangedTask" :status="task.status"/>
     </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import taskStatusMenu from "./task-status-menu.vue";
+import * as tools from "../tools";
 
 export default {
   name: "task-card",
@@ -29,7 +32,8 @@ export default {
   },
   data() {
     return {
-      isHover: false
+      isHover: false,
+      STATUS: tools.STATUS
     };
   },
   methods: {
@@ -39,9 +43,9 @@ export default {
     del() {
       this.$emit("taskDelete", this.task);
     },
-    statusChange(status) {
+    statusChangedTask(status) {
       this.task.status = status;
-      this.$emit("statusChanged", this.task);
+      this.$emit("statusChangedTask", this.task);
     }
   }
 };

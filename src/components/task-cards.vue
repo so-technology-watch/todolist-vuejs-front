@@ -58,26 +58,18 @@ export default {
     },
     addTask(task) {
       this.$emit("addTask", task)
-      // this.taskList.push(task)
-      // restClient.Create(task);
     },
     updateTask(task) {
       this.$emit("updateTask", task)
-      // this.taskList.filter(t => t.id == task.id)[0] = task
-      // restClient.Update(task.id, task);
     },
     taskEdit(task) {
       this.editedItem = task;
     },
     deleteTask(task) {
       this.$emit("deleteTask", task)
-      // this.taskList = this.taskList.filter(item => item != task)
-      // restClient.Delete(task.id);
     },
     statusChangedTask(task) {
       this.$emit("statusChangedTask", task)
-      // this.taskList.filter(t => t.id == task.id)[0] = task
-      // restClient.Update(task.id, task);
     },
   }
 };

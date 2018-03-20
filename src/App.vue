@@ -26,12 +26,16 @@
         <v-text-field solo-inverted prepend-icon="search" label="Search" v-model="searchText" clearable flat color="white" :loading="searchLoading" />
       </v-toolbar-items>
       <v-spacer></v-spacer>
-      <v-toolbar-side-icon fab @click="emptyTrash" v-if="view == 'trash'"><v-icon large>delete_sweep</v-icon>
+      <v-toolbar-side-icon fab @click="emptyTrash" v-if="view == 'trash'">
+        <v-icon large>delete_sweep</v-icon>
       </v-toolbar-side-icon>
     </v-toolbar>
     <taskCards :task-list="archivesList" :showAddButton="false" v-if="view == 'archives'" @updateTask="updateTask" @deleteTask="deleteTask" @statusChangedTask="statusChangedTask"></taskCards>
     <taskCards :task-list="trashList" :showAddButton="false" v-else-if="view == 'trash'" @updateTask="updateTask" @deleteTask="deleteTask" @statusChangedTask="statusChangedTask"></taskCards>
     <taskCards :task-list="myTasksList" :showAddButton="true" v-else @addTask="addTask" @updateTask="updateTask" @deleteTask="deleteTask" @statusChangedTask="statusChangedTask"></taskCards>
+    <v-alert :type="alertType" v-model="alert" outline transition="slide-y-reverse-transition">
+      {{alertMessage}}
+    </v-alert>
   </v-app>
 </template>
 
@@ -62,7 +66,10 @@ export default {
       searchText: "",
       searchLoading: false,
       view: "myTasks",
-      STATUS: tools.STATUS
+      STATUS: tools.STATUS,
+      alert: false,
+      alertType: "info",
+      alertMessage: ""
     };
   },
   watch: {
@@ -93,30 +100,52 @@ export default {
   },
   methods: {
     addTask(task) {
-      this.taskList.push(task);
-      restClient.Create(task);
+      restClient
+        .Create(task)
+        .then(serverTask => this.taskList.push(serverTask));
     },
     updateTask(task) {
       this.taskList.filter(t => t.id == task.id)[0] = task;
-      restClient.Update(task.id, task);
+      restClient
+        .Update(task.id, task)
+        .then(
+          serverTask =>
+            (this.taskList.filter(t => t.id == task.id)[0] = serverTask)
+        );
     },
     deleteTask(task) {
+      this.addAlert("Task was successfully deleted", "info");
       this.taskList = this.taskList.filter(item => item != task);
       restClient.Delete(task.id);
     },
     emptyTrash() {
-      //TODO add alert and confirmation
+      this.addAlert("Trash was emptied successfully", "info");
       this.trashList.forEach(task => {
         restClient.Delete(task.id);
       });
-      this.taskList = this.taskList.filter(item => item.status != this.STATUS.deleted);
+
+      this.taskList = this.taskList.filter(
+        item => item.status != this.STATUS.deleted
+      );
     },
     statusChangedTask(task) {
+      if (task.status == this.STATUS.deleted) {
+        this.addAlert("Task was moved to trash", "info");
+      } else if (task.status == this.STATUS.archived) {
+        this.addAlert("Task was moved to archives", "info");
+      }
       this.taskList.filter(t => t.id == task.id)[0] = task;
       restClient.Update(task.id, task);
     },
     refreshTasks() {
-      return restClient.GetAll().then(list => (this.taskList = list));
+      return restClient
+        .GetAll()
+        .then(list => {
+          this.taskList = list;
+        })
+        .catch(error => {
+          this.addAlert("Connection failure", "error");
+        });
     },
     refreshFilteredList() {
       if (this.searchText != null && this.searchText != "") {
@@ -131,6 +160,19 @@ export default {
       } else {
         this.filteredTaskList = this.taskList;
       }
+    },
+    addAlert(message, type) {
+      this.alertMessage = message;
+      this.alertType = type;
+      this.alert = true;
+      setTimeout(() => {
+        if (this.alert) {
+          this.alert = false;
+          setTimeout(() => {
+            this.alertMessage = "";
+          }, 200);
+        }
+      }, 5000);
     }
   }
 };

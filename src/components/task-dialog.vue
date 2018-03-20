@@ -18,6 +18,8 @@
 
 <script>
 import editable from "./editable.vue";
+import * as tools from "../tools";
+import { STATUS } from '../tools';
 
 export default {
   name: "task-dialog",
@@ -31,7 +33,8 @@ export default {
       title: "",
       description: "",
       taskDescription: "",
-      taskTitle: ""
+      taskTitle: "",
+      STATUS: tools.STATUS
     };
   },
   watch: {
@@ -72,11 +75,13 @@ export default {
         let modifiedTask = this.task;
         modifiedTask.title = this.title;
         modifiedTask.description = this.description;
+        modifiedTask.status = STATUS.todo;
         this.$emit("closed", modifiedTask);
       } else {
         this.$emit("closed", {
           title: this.title,
-          description: this.description
+          description: this.description,
+          status: STATUS.todo
         });
       }
     }

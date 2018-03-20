@@ -7,7 +7,7 @@ export function taskColor(status) {
             return 'green'
             break;
         default:
-            return 'grey'
+            return 'grey darken-3'
             break;
     }
 }

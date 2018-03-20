@@ -10,6 +10,10 @@
         v-if="task.status != STATUS.deleted">
         <v-icon v-if="isHover">delete</v-icon>
       </v-btn>
+      <v-btn flat small fab @click="deleteTask"
+        v-if="task.status == STATUS.deleted">
+        <v-icon v-if="isHover">delete</v-icon>
+      </v-btn>
       <v-btn flat small fab @click="statusChangedTask(STATUS.archived)"
               v-if="task.status != STATUS.archived">
         <v-icon v-if="isHover">archive</v-icon>
@@ -40,8 +44,8 @@ export default {
     edit() {
       this.$emit("taskEdit", this.task);
     },
-    del() {
-      this.$emit("taskDelete", this.task);
+    deleteTask() {
+      this.$emit("deleteTask", this.task);
     },
     statusChangedTask(status) {
       this.task.status = status;

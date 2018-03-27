@@ -13,9 +13,9 @@ export function taskColor(status) {
 }
 
 export const STATUS = {
-    todo: 1,
-    doing: 2,
-    done: 3,
-    archived: 4,
-    deleted: 5
+    todo: 0,
+    doing: 1,
+    done: 2,
+    archived: 3,
+    deleted: 4
 }
